@@ -43,7 +43,7 @@ trait UserComponent {
 }
 
 object Main extends LoggerComponent with UserComponent with App{
-  override val user=new VipUser("A")
+  override val user=new VipUser("A level")
   override val logger=new InfoLogger
   user.save()
 }
