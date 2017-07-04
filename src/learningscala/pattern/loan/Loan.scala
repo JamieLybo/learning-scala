@@ -1,7 +1,7 @@
 package learningscala.pattern.loan
 
 import java.io.File
-import java.util.Scanner
+import java.util.{Properties, Scanner}
 
 /**
   * Loan pattern to control resource generate, close
@@ -22,4 +22,26 @@ object Loan extends App {
       println(scanner.next())
   }
 
+  //another loan
+  def using[A <: {def close() : Unit}, B](resource: A)(f: A => B): B =
+    try {
+      f(resource)
+    }
+    finally {
+      if (resource != null)
+        resource.close()
+    }
+
+  def propToMap: Map[String, String] = {
+    val prop = new Properties()
+    using(this.getClass.getClassLoader.getResourceAsStream(s"prop.properties")) {
+      source => {
+        prop.load(source)
+        import scala.collection.JavaConversions.propertiesAsScalaMap
+        prop.toMap
+      }
+    }
+  }
+
+  println(propToMap)
 }
